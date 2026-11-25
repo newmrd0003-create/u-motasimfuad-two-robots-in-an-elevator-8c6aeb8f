@@ -13,9 +13,15 @@ ENTRY = (
 )
 
 
+def resolve_output_path() -> Path:
+    """Return the entry output path, honouring $OUTPUT_PATH for local checks."""
+    return Path(os.environ.get("OUTPUT_PATH", "/output/entry.txt"))
+
+
 def main() -> None:
-    out = Path(os.environ.get("OUTPUT_PATH", "/output/entry.txt"))
+    out = resolve_output_path()
     out.parent.mkdir(parents=True, exist_ok=True)
+    # Write exactly ENTRY: no trailing newline, the entry must stay 150 chars.
     out.write_text(ENTRY, encoding="utf-8")
 
 
